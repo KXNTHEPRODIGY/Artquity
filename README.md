@@ -1,107 +1,94 @@
-<<<<<<< HEAD
-# Artquity
+Artquity
 
-An NFT / art-IP adjudication dApp on GenLayer. A plaintiff who believes
-their artwork was copied into an NFT collection files a claim against a
-named defendant wallet; an Intelligent Contract screens the claim with a
-multimodal LLM, lets the defendant respond, then weighs both sides via
-validator consensus and records a binding verdict on-chain.
+Autonomous IP dispute adjudication for NFT art, built on GenLayer Intelligent Contracts.
 
-## Architecture
+Instead of relying on centralized arbitration or slow off-chain review, disputes over NFT intellectual property are resolved directly on-chain. Validators running LLMs reach consensus on evidence, and the verdict is written to the contract — verifiable, deterministic-by-consensus, and permissionless.
 
-- `contracts/art_dispute_registry.py` — the Intelligent Contract
-- Frontend (Phase 2, separate) — Next.js + genlayer-js
 
-## Phase 1: Contract deployment
+How It Works
 
-1. Lint locally:
 
-   ```
-   npm install -g genlayer
-   genvm-lint check contracts/art_dispute_registry.py
-   ```
+Submit evidence — A claimant files a dispute against an NFT, describing the alleged infringement and attaching evidence URIs.
+Validators reach consensus — GenLayer's Intelligent Contract runs the adjudication logic across validators, who independently evaluate the claim and converge on an outcome, if the Claimant'c complaint is true the Defandant gets served to defend their collection, if it the claimant's complaint is false it's inatantly rejected.
+On-chain verdict — The consensus verdict and reasoning are stored on-chain and surfaced in the registry.
 
-2. Open https://studio.genlayer.com in a browser. Use the account
-   selector to pick an account; click the 💧 button to fund it.
 
-3. Paste the contents of `contracts/art_dispute_registry.py` into
-   Studio's editor. Studio auto-detects the `response_window_seconds`
-   constructor parameter from `__init__`. Default value (259200 seconds
-   = 3 days) is fine for testing; set lower for default-judgment tests.
 
-4. Click **Deploy**. Copy the resulting contract address.
+Features
 
-5. Smoke-test via Studio's Execute Transaction UI:
-   - As Account 1: `file_claim(defendant=<account_2_address>,
-     original_art_url=<direct image URL>,
-     collection_url=<direct image URL>,
-     plaintiff_argument=<text>)`
-   - Watch Node Logs — leader fetches both images, calls the vision LLM,
-     validators reach consensus. Read `get_case(0)` after; status should
-     be `1` (SERVED) or `0` (REJECTED).
-   - As Account 2: `respond(case_id=0,
-     defendant_evidence_url=<direct image URL>,
-     defendant_argument=<text>)`. Status → `2` (RESPONDED).
-   - As any account: `adjudicate(case_id=0)`. Status → `3` (RESOLVED),
-     `verdict` is `1` (plaintiff) or `2` (defendant), `final_reasoning`
-     carries the LLM's written justification.
 
-6. Save the contract address into `.env.local`:
+File claims against any NFT with structured evidence
+Autonomous adjudication via GenLayer Intelligent Contracts (no human arbiter)
+Public dispute registry with status tracking (pending, under review, resolved)
+Verdict transparency — adjudication reasoning and validator consensus visible per dispute
+Web3-native UI — wallet connect, live on-chain stats, responsive design
 
-   ```
-   NEXT_PUBLIC_CONTRACT_ADDRESS=0x...
-   ```
 
-## Important testing notes
 
-- Use **direct image URLs** (`.jpg`/`.png`), not Google Image Search
-  results pages. The latter produce oversized screenshots that can
-  blow `exec_prompt`'s encoder.
-- Studionet state is **temporary** — your contract will eventually be
-  wiped. For production submission, redeploy to Testnet Bradbury.
-- Only the wallet named as `defendant` in `file_claim` may call
-  `respond` for that case. This is enforced on-chain.
+Tech Stack
 
-## Networks
 
-- **Studionet** (dev): https://studio.genlayer.com/api · chainId 61999
-- **Testnet Bradbury** (submission): https://rpc-bradbury.genlayer.com ·
-  chainId 4221 · faucet at https://testnet-faucet.genlayer.foundation
+Contracts: GenLayer Intelligent Contracts (Python) — art_dispute_registry.py
+Frontend: React + wallet integration
+Tooling: GenLayer CLI, genvm-lint
 
-## Phase 2: Frontend (`web/`)
 
-A Next.js (App Router) + genlayer-js dApp that drives the full case lifecycle:
-file a claim, browse the docket, view a case with its evidence images and the
-contract's LLM reasoning, respond as the named defendant, and adjudicate.
 
-- Wallet: **Privy** (embedded wallet via email/social, or an external wallet).
-  No browser-extension wallet required — Privy's EIP-1193 provider signs the
-  GenLayer transactions directly (on Bradbury a write is a standard EVM tx to
-  the consensus contract, so no MetaMask Snap is involved).
-- Network: **Testnet Bradbury** (chainId 4221).
+Adjust this section to match your actual frontend stack (Next.js / Vite, styling, etc.).
 
-```
-cd web
-cp .env.local.example .env.local   # set the two NEXT_PUBLIC_* vars below
+
+
+
+Getting Started
+
+Prerequisites
+
+
+Node.js (LTS)
+GenLayer CLI
+
+
+bashnpm install -g genlayer
+
+If genvm-lint or genlayer isn't found after install, ensure npm's global bin is on your PATH:
+
+bashnpm config get prefix
+# add <prefix>/bin to your PATH, then restart your shell
+
+Install
+
+bashgit clone https://github.com/<your-username>/art-dispute-registry.git
+cd art-dispute-registry
 npm install
-npm run dev                         # http://localhost:3000
-```
 
-Required env vars in `web/.env.local`:
+Run the frontend
 
-- `NEXT_PUBLIC_CONTRACT_ADDRESS` — the deployed `ArtDisputeRegistry` address on
-  Bradbury.
-- `NEXT_PUBLIC_PRIVY_APP_ID` — your Privy app ID (Privy dashboard → App
-  settings → App ID). Without it the app runs but wallet login is disabled.
+bashnpm run dev
 
-Fund the logged-in wallet's address with Bradbury GEN via the faucet
-(https://testnet-faucet.genlayer.foundation) before filing a claim.
+Deploy the contract
 
-Notes:
-- Use **direct** image URLs (`.jpg`/`.png`) for artwork/collection/evidence —
-  the same constraint as the contract's `web.render` screenshots.
-- `file_claim` and `adjudicate` run multimodal LLM + validator consensus, so
-  those transactions take noticeably longer than a plain write to confirm.
-=======
-# Artquity
->>>>>>> dba5caf76aa41f81363aed2c52a21e167ec90234
+bash# via GenLayer CLI / Studio — see docs.genlayer.com
+genlayer deploy art_dispute_registry.py
+
+
+Project Structure
+
+.
+├── contracts/
+│   └── art_dispute_registry.py   # Intelligent Contract: claims, adjudication, verdicts
+├── frontend/
+│   ├── src/
+│   │   ├── pages/                # Home, File Claim, Disputes
+│   │   ├── components/           # Button, Card, Badge, StatusPill, ...
+│   │   └── lib/                  # contract bindings, wallet
+│   └── ...
+└── README.md
+
+
+Usage
+
+
+Connect wallet on the homepage.
+File a Claim — enter the NFT contract address, token ID, infringement description, and evidence links.
+Track it in the Disputes registry as validators adjudicate.
+View the verdict — consensus outcome and reasoning appear on the dispute detail page once resolved.
