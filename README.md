@@ -4,6 +4,7 @@ Autonomous IP dispute adjudication for NFT art, built on GenLayer Intelligent Co
 
 Instead of relying on centralized arbitration or slow off-chain review, disputes over NFT intellectual property are resolved directly on-chain. Validators running LLMs reach consensus on evidence, and the verdict is written to the contract — verifiable, deterministic-by-consensus, and permissionless.
 
+Over 80% of NFTs minted through OpenSea's free tool IN 2022 were flagged by the platform itself as plagiarized, fake, or spam. IP disputes in NFT art are rampant — and adjudicating them is slow, centralized, and manual. Artquity fixes that.
 
 How It Works
 
