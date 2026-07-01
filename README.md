@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Artquity
 
 An NFT / art-IP adjudication dApp on GenLayer. A plaintiff who believes
@@ -101,3 +102,6 @@ Notes:
   the same constraint as the contract's `web.render` screenshots.
 - `file_claim` and `adjudicate` run multimodal LLM + validator consensus, so
   those transactions take noticeably longer than a plain write to confirm.
+=======
+# Artquity
+>>>>>>> dba5caf76aa41f81363aed2c52a21e167ec90234
