@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(command -v genvm-lint genlayer)",
+      "Bash(genvm-lint --version)",
+      "Bash(echo \"exit: $?\")",
+      "Bash(command -v genlayer genvm-lint)",
+      "Bash(genlayer --help)",
+      "Bash(genvm-lint check *)",
+      "Bash(find /c/Users/User -path \"*genvm*\" -name \"types.py\" 2>/dev/null | head; echo \"---\"; find /c/Users/User/.cache /c/Users/User/AppData -name \"types.py\" -path \"*genlayer*\" 2>/dev/null | head)",
+      "Read(//c/Users/User/**)",
+      "Read(//c/Users/User/.cache/**)"
+    ]
+  }
+}

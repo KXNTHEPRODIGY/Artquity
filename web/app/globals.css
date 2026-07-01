@@ -1,0 +1,94 @@
+@import "tailwindcss";
+
+:root {
+  /* Near-black canvas with elevated surfaces */
+  --bg: #08090b;
+  --bg-soft: #0b0d10;
+  --surface: #0f1216;
+  --surface-2: #14181d;
+  --border: #1e232a;
+  --border-strong: #2a3038;
+  --text: #edeef1;
+  --muted: #878d97;
+  --faint: #565c66;
+  /* Single electric accent */
+  --accent: #cbff3c;
+  --accent-press: #b6e82f;
+  --accent-soft: rgba(203, 255, 60, 0.1);
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-soft: var(--bg-soft);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-accent: var(--accent);
+  --color-accent-press: var(--accent-press);
+
+  --font-sans: var(--font-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-mono-jb), ui-monospace, "SFMono-Regular", monospace;
+}
+
+* {
+  border-color: var(--border);
+}
+
+html,
+body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--accent);
+  color: #05070a;
+}
+
+/* Thin, dark scrollbar to match the aesthetic */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+
+/* Utility: uppercase mono eyebrow label */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* Subtle animated accent glow used behind the hero */
+.hero-grid {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 75%);
+}
+
+@keyframes pulse-soft {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.85;
+  }
+}
+
+.dot-live {
+  animation: pulse-soft 2s ease-in-out infinite;
+}
